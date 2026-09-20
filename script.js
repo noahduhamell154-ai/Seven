@@ -18,36 +18,38 @@ const route = new Set([
   "6-6",
 ]);
 
-for (let row = 0; row < rows; row += 1) {
-  for (let column = 0; column < columns; column += 1) {
-    const tile = document.createElement("article");
-    const key = `${row}-${column}`;
-    const label = document.createElement("span");
-    const name = document.createElement("strong");
+if (grid) {
+  for (let row = 0; row < rows; row += 1) {
+    for (let column = 0; column < columns; column += 1) {
+      const tile = document.createElement("article");
+      const key = `${row}-${column}`;
+      const label = document.createElement("span");
+      const name = document.createElement("strong");
 
-    tile.className = "platform-tile";
-    tile.setAttribute("role", "listitem");
+      tile.className = "platform-tile";
+      tile.setAttribute("role", "listitem");
 
-    label.className = "tile-label";
-    label.textContent = `Platform ${row + 1}.${column + 1}`;
+      label.className = "tile-label";
+      label.textContent = `Platform ${row + 1}.${column + 1}`;
 
-    name.className = "tile-name";
-    name.textContent = `${String.fromCharCode(65 + row)}${column + 1}`;
+      name.className = "tile-name";
+      name.textContent = `${String.fromCharCode(65 + row)}${column + 1}`;
 
-    tile.append(label, name);
+      tile.append(label, name);
 
-    if (route.has(key)) {
-      tile.classList.add("active");
+      if (route.has(key)) {
+        tile.classList.add("active");
+      }
+
+      if (key === "0-0") {
+        tile.classList.add("start");
+      }
+
+      if (key === "6-6") {
+        tile.classList.add("end");
+      }
+
+      grid.appendChild(tile);
     }
-
-    if (key === "0-0") {
-      tile.classList.add("start");
-    }
-
-    if (key === "6-6") {
-      tile.classList.add("end");
-    }
-
-    grid.appendChild(tile);
   }
 }
