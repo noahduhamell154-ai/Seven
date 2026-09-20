@@ -152,6 +152,9 @@ h1 {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 0.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .platform-tile {
@@ -223,8 +226,8 @@ h1 {
     flex-direction: column;
   }
 
-  .platform-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+  .grid-panel {
+    padding: 1.25rem;
   }
 }
 
@@ -239,6 +242,19 @@ h1 {
   }
 
   .platform-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .platform-tile {
+    padding: 0.5rem;
+    border-radius: 0.8rem;
+  }
+
+  .tile-label {
+    font-size: 0.7rem;
+  }
+
+  .tile-name {
+    font-size: 0.9rem;
   }
 }

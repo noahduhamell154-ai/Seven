@@ -21,13 +21,12 @@ const route = new Set([
 if (grid) {
   for (let row = 0; row < rows; row += 1) {
     for (let column = 0; column < columns; column += 1) {
-      const tile = document.createElement("article");
+      const tile = document.createElement("li");
       const key = `${row}-${column}`;
       const label = document.createElement("span");
       const name = document.createElement("strong");
 
       tile.className = "platform-tile";
-      tile.setAttribute("role", "listitem");
 
       label.className = "tile-label";
       label.textContent = `Platform ${row + 1}.${column + 1}`;
