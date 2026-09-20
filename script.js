@@ -25,28 +25,36 @@ if (grid) {
       const key = `${row}-${column}`;
       const label = document.createElement("span");
       const name = document.createElement("strong");
+      const tileCode = `${String.fromCharCode(65 + row)}${column + 1}`;
+      const tileNumber = `Platform ${row + 1}.${column + 1}`;
+      let state = "standard platform";
 
       tile.className = "platform-tile";
 
       label.className = "tile-label";
-      label.textContent = `Platform ${row + 1}.${column + 1}`;
+      label.textContent = tileNumber;
 
       name.className = "tile-name";
-      name.textContent = `${String.fromCharCode(65 + row)}${column + 1}`;
+      name.textContent = tileCode;
 
       tile.append(label, name);
 
       if (route.has(key)) {
         tile.classList.add("active");
+        state = "route platform";
       }
 
       if (key === "0-0") {
         tile.classList.add("start");
+        state = "start platform";
       }
 
       if (key === "6-6") {
         tile.classList.add("end");
+        state = "end platform";
       }
+
+      tile.setAttribute("aria-label", `${tileNumber}, ${tileCode}, ${state}`);
 
       grid.appendChild(tile);
     }
