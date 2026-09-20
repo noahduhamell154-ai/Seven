@@ -1,0 +1,16 @@
+{
+  "name": "seven",
+  "version": "1.0.0",
+  "description": "A main-based grid just like the movie Tron: Legacy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://localhost:26831/noahduhamell154-ai/Seven"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
