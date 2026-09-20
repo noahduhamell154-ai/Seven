@@ -27,10 +27,6 @@ for (let row = 0; row < rows; row += 1) {
 
     tile.className = "platform-tile";
     tile.setAttribute("role", "listitem");
-    tile.setAttribute(
-      "aria-label",
-      `Platform ${row + 1}.${column + 1} at ${String.fromCharCode(65 + row)}${column + 1}`,
-    );
 
     label.className = "tile-label";
     label.textContent = `Platform ${row + 1}.${column + 1}`;
