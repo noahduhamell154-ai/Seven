@@ -22,12 +22,23 @@ for (let row = 0; row < rows; row += 1) {
   for (let column = 0; column < columns; column += 1) {
     const tile = document.createElement("article");
     const key = `${row}-${column}`;
+    const label = document.createElement("span");
+    const name = document.createElement("strong");
 
     tile.className = "platform-tile";
-    tile.innerHTML = `
-      <span class="tile-label">Platform ${row + 1}.${column + 1}</span>
-      <strong class="tile-name">${String.fromCharCode(65 + row)}${column + 1}</strong>
-    `;
+    tile.setAttribute("role", "listitem");
+    tile.setAttribute(
+      "aria-label",
+      `Platform ${row + 1}.${column + 1} at ${String.fromCharCode(65 + row)}${column + 1}`,
+    );
+
+    label.className = "tile-label";
+    label.textContent = `Platform ${row + 1}.${column + 1}`;
+
+    name.className = "tile-name";
+    name.textContent = `${String.fromCharCode(65 + row)}${column + 1}`;
+
+    tile.append(label, name);
 
     if (route.has(key)) {
       tile.classList.add("active");

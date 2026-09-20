@@ -5,10 +5,6 @@
   "scripts": {
     "start": "python3 -m http.server 8000"
   },
-  "repository": {
-    "type": "git",
-    "url": "http://localhost:26831/noahduhamell154-ai/Seven"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC"
