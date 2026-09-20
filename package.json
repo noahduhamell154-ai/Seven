@@ -2,9 +2,8 @@
   "name": "seven",
   "version": "1.0.0",
   "description": "A main-based grid just like the movie Tron: Legacy",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "python3 -m http.server 8000"
   },
   "repository": {
     "type": "git",

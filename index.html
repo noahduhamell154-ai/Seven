@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seven Platform Grid</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero">
+        <p class="eyebrow">Seven</p>
+        <h1>Platform Grid</h1>
+        <p class="subtitle">
+          A neon-inspired grid of connected platforms with a Tron-like glow.
+        </p>
+      </section>
+
+      <section class="grid-panel" aria-labelledby="platform-grid-title">
+        <div class="panel-header">
+          <div>
+            <h2 id="platform-grid-title">Arena Layout</h2>
+            <p>7 x 7 modular platforms with a highlighted route.</p>
+          </div>
+          <div class="legend" aria-label="Platform legend">
+            <span><i class="legend-swatch start"></i>Start</span>
+            <span><i class="legend-swatch active"></i>Route</span>
+            <span><i class="legend-swatch end"></i>End</span>
+          </div>
+        </div>
+
+        <div class="platform-grid" id="platform-grid" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
