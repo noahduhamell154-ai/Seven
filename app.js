@@ -14,6 +14,9 @@ const MAX_TRAIL = 14;
 const THREAT_LIMIT = 6;
 const MAX_WEAPON_CHARGE = 100;
 const MAX_TOOL_CHARGE = 100;
+const WEAPON_SHOT_COST = 8;
+const BREACH_DAMAGE = 20;
+const TOOL_REPAIR_COST = 20;
 const WEAPON_RECHARGE_RATE = 3.2;
 const TOOL_RECHARGE_RATE = 1.1;
 
@@ -116,11 +119,12 @@ function resolveCollisions() {
   state.threats = state.threats.filter((threat) => {
     const aiContact = sameCell(threat, state.ai);
     const trailContact = state.trail.some((segment) => sameCell(segment, threat));
-    const intercepted = (aiContact || trailContact) && availableWeaponCharge >= 8;
+    const intercepted =
+      (aiContact || trailContact) && availableWeaponCharge >= WEAPON_SHOT_COST;
 
     if (intercepted) {
       state.score += 1;
-      availableWeaponCharge -= 8;
+      availableWeaponCharge -= WEAPON_SHOT_COST;
     }
 
     return !intercepted;
@@ -131,10 +135,10 @@ function resolveCollisions() {
   const breaches = state.threats.filter((threat) => sameCell(threat, state.ai)).length;
 
   if (breaches > 0) {
-    const repairCharges = Math.min(breaches, Math.floor(state.toolCharge / 20));
-    const integrityChange = breaches * 20 - repairCharges * 20;
-    state.toolCharge = Math.max(0, state.toolCharge - repairCharges * 20);
-    state.integrity = clamp(state.integrity - integrityChange, 0, 100);
+    const repairCharges = Math.min(breaches, Math.floor(state.toolCharge / TOOL_REPAIR_COST));
+    const unrepairedBreaches = breaches - repairCharges;
+    state.toolCharge = Math.max(0, state.toolCharge - repairCharges * TOOL_REPAIR_COST);
+    state.integrity = clamp(state.integrity - unrepairedBreaches * BREACH_DAMAGE, 0, 100);
 
     let remainingRepairs = repairCharges;
     state.threats = state.threats.filter((threat) => {
