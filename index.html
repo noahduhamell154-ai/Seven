@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seven | Grid Modes</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-mode="legacy">
+    <main class="app-shell">
+      <section class="hero">
+        <p class="eyebrow" id="mode-eyebrow">wake-up Neo...</p>
+        <h1 id="mode-title">Tron: Legacy Grid</h1>
+        <p class="subtitle" id="mode-subtitle">
+          A light-grid inspired by Tron: Legacy with luminous platforms and a
+          glowing path across the arena.
+        </p>
+        <p class="access-copy" id="mode-access-copy">
+          Legacy access remains open across the arena.
+        </p>
+        <div class="mode-switch" role="group" aria-label="Grid mode selector">
+          <button
+            class="mode-button is-selected"
+            type="button"
+            data-mode-trigger="legacy"
+            aria-pressed="true"
+          >
+            Legacy Grid
+          </button>
+          <button
+            class="mode-button"
+            type="button"
+            data-mode-trigger="peace7"
+            aria-pressed="false"
+          >
+            Peace7
+          </button>
+        </div>
+      </section>
+
+      <section class="grid-panel" aria-labelledby="platform-grid-title">
+        <div class="panel-header">
+          <div>
+            <h2 id="platform-grid-title">Arena Layout</h2>
+            <p id="panel-description">
+              7 x 7 light platforms with a highlighted run across the grid.
+            </p>
+          </div>
+          <ul class="legend" aria-label="Platform legend">
+            <li>
+              <i class="legend-swatch start" aria-hidden="true"></i
+              ><span id="legend-start">Start</span>
+            </li>
+            <li>
+              <i class="legend-swatch active" aria-hidden="true"></i
+              ><span id="legend-active">Route</span>
+            </li>
+            <li>
+              <i class="legend-swatch end" aria-hidden="true"></i
+              ><span id="legend-end">End</span>
+            </li>
+          </ul>
+        </div>
+
+        <ul
+          class="platform-grid"
+          id="platform-grid"
+          aria-label="Seven platform grid"
+        ></ul>
+      </section>
+    </main>
+
+    <script src="./script.js" defer></script>
+  </body>
+</html>
