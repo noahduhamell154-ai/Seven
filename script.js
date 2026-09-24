@@ -182,6 +182,8 @@ const activateTile = (key, fromReplay = false) => {
         missedTile.classList.add("is-misstep");
         window.setTimeout(() => missedTile.classList.remove("is-misstep"), 250);
       }
+      missedButton.setAttribute("aria-invalid", "true");
+      window.setTimeout(() => missedButton.removeAttribute("aria-invalid"), 400);
     }
     setStatus(`Signal mismatch. Next platform is ${toCode(expectedKey)}.`);
     return;
