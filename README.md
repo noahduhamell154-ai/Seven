@@ -4,8 +4,9 @@ A main-based grid inspired by Tron: Legacy.
 
 ## Mecha AI
 
-This repository now includes a small static Grid-defense prototype where Mecha
-AI patrols the arena and intercepts incoming threats.
+This repository now includes a small static Grid-defense prototype where AI
+Program 34 pilots an armed vehicle, intercepts incoming threats, and uses
+repair tools to stabilize the arena.
 
 ## Run locally
 
