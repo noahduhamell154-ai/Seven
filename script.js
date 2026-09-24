@@ -182,15 +182,6 @@ const activateTile = (key, fromReplay = false) => {
         missedTile.classList.add("is-misstep");
         window.setTimeout(() => missedTile.classList.remove("is-misstep"), 250);
       }
-      missedButton.setAttribute(
-        "aria-label",
-        `${missedButton.dataset.baseLabel || missedButton.getAttribute("aria-label")}. Signal mismatch.`
-      );
-      window.setTimeout(() => {
-        if (missedButton.dataset.baseLabel) {
-          missedButton.setAttribute("aria-label", missedButton.dataset.baseLabel);
-        }
-      }, 400);
     }
     setStatus(`Signal mismatch. Next platform is ${toCode(expectedKey)}.`);
     return;
@@ -199,6 +190,9 @@ const activateTile = (key, fromReplay = false) => {
   activatedTiles.add(key);
   expectedStep += 1;
   updateTileActivation();
+  if (replayButton) {
+    replayButton.disabled = expectedStep > 0 && expectedStep < mode.activeTiles.length;
+  }
 
   if (expectedStep === mode.activeTiles.length) {
     clearReplay();
@@ -217,6 +211,11 @@ const activateTile = (key, fromReplay = false) => {
 const replayRun = () => {
   const mode = modes[currentMode];
   if (!mode || !replayButton) {
+    return;
+  }
+
+  if (expectedStep > 0) {
+    setStatus("Reset run before replaying the full signal.");
     return;
   }
 
@@ -315,7 +314,6 @@ const renderGrid = (modeKey) => {
 
       const baseLabel = `${tileNumber}, ${tileCode}, ${state}`;
       button.setAttribute("aria-label", baseLabel);
-      button.dataset.baseLabel = baseLabel;
       button.addEventListener("click", () => activateTile(key));
 
       grid.appendChild(tile);
