@@ -100,10 +100,11 @@ const renderGrid = (modeKey) => {
     return;
   }
 
-  const mode = modes[modeKey] || modes.legacy;
+  const normalizedModeKey = Object.hasOwn(modes, modeKey) ? modeKey : "legacy";
+  const mode = modes[normalizedModeKey];
   const activeTiles = new Set(mode.activeTiles);
 
-  body.dataset.mode = modeKey;
+  body.dataset.mode = normalizedModeKey;
   eyebrow.textContent = mode.eyebrow;
   title.textContent = mode.title;
   subtitle.textContent = mode.subtitle;
