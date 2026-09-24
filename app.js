@@ -135,7 +135,16 @@ function resolveCollisions() {
     const integrityChange = breaches * 20 - repairCharges * 20;
     state.toolCharge = Math.max(0, state.toolCharge - repairCharges * 20);
     state.integrity = clamp(state.integrity - integrityChange, 0, 100);
-    state.threats = state.threats.filter((threat) => !sameCell(threat, state.ai));
+
+    let remainingRepairs = repairCharges;
+    state.threats = state.threats.filter((threat) => {
+      if (remainingRepairs > 0 && sameCell(threat, state.ai)) {
+        remainingRepairs -= 1;
+        return false;
+      }
+
+      return true;
+    });
   }
 
   while (state.threats.length < THREAT_LIMIT && Math.random() > 0.72) {
