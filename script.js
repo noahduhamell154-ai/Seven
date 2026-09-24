@@ -101,6 +101,7 @@ const modes = {
 let currentMode = "legacy";
 let expectedStep = 0;
 let replayTimer = null;
+let misstepTimer = null;
 const activatedTiles = new Set();
 
 const toCode = (key) => {
@@ -159,6 +160,13 @@ const updateTileActivation = () => {
 
 const resetRun = (announce = true) => {
   clearReplay();
+  if (misstepTimer) {
+    window.clearTimeout(misstepTimer);
+    misstepTimer = null;
+  }
+  if (grid) {
+    grid.querySelectorAll(".platform-tile.is-misstep").forEach((tile) => tile.classList.remove("is-misstep"));
+  }
   expectedStep = 0;
   activatedTiles.clear();
   updateTileActivation();
@@ -186,11 +194,16 @@ const activateTile = (key, fromReplay = false) => {
     if (missedButton) {
       const missedTile = missedButton.closest(".platform-tile");
       if (missedTile) {
+        if (misstepTimer) {
+          window.clearTimeout(misstepTimer);
+          misstepTimer = null;
+        }
         missedTile.classList.add("is-misstep");
         updateTileActivation();
-        window.setTimeout(() => {
+        misstepTimer = window.setTimeout(() => {
           missedTile.classList.remove("is-misstep");
           updateTileActivation();
+          misstepTimer = null;
         }, 250);
       }
     }
