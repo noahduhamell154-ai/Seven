@@ -49,6 +49,23 @@ body[data-mode="peace7"] {
   --grid-line: rgba(98, 255, 186, 0.1);
 }
 
+body[data-mode="matrix"] {
+  --bg: #020703;
+  --bg-2: #041108;
+  --panel: rgba(4, 18, 10, 0.86);
+  --line: rgba(97, 255, 131, 0.2);
+  --glow: #64ff82;
+  --glow-soft: rgba(100, 255, 130, 0.25);
+  --accent: #96ff8f;
+  --accent-soft: rgba(150, 255, 143, 0.24);
+  --text: #e8ffed;
+  --muted: #a0cca8;
+  --route: #72ff95;
+  --end: #b4ff82;
+  --top-glow: rgba(93, 255, 136, 0.12);
+  --grid-line: rgba(100, 255, 130, 0.11);
+}
+
 body::before {
   content: "";
   position: fixed;
@@ -109,6 +126,31 @@ h1 {
   margin-top: 0.5rem;
 }
 
+.relay-status,
+.grid-system-state,
+.control-guidance,
+.control-feedback,
+.grid-live-status {
+  margin: 0.75rem 0 0;
+  color: var(--muted);
+}
+
+.grid-system-state {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.control-feedback {
+  min-height: 1.25rem;
+}
+
+.system-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.85rem;
+}
+
 .mode-button {
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -124,6 +166,12 @@ h1 {
     background 150ms ease;
 }
 
+.mode-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+  transform: none;
+}
+
 .mode-button:hover,
 .mode-button:focus-visible {
   border-color: rgba(255, 255, 255, 0.35);
@@ -136,6 +184,14 @@ h1 {
   border-color: var(--glow);
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), var(--glow-soft));
   box-shadow: 0 0 18px var(--glow-soft);
+}
+
+.danger-button {
+  border-color: rgba(255, 99, 99, 0.45);
+}
+
+.restore-button {
+  border-color: rgba(120, 226, 255, 0.45);
 }
 
 .grid-panel {
@@ -332,6 +388,61 @@ body[data-mode="peace7"] .platform-tile.end {
     linear-gradient(145deg, rgba(255, 216, 111, 0.22), rgba(98, 255, 186, 0.08));
 }
 
+body[data-grid-state="collapsing"]::before,
+body[data-grid-state="collapsed"]::before {
+  opacity: 0.08;
+}
+
+body[data-grid-state="collapsing"] .grid-panel,
+body[data-grid-state="collapsed"] .grid-panel {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 8px 26px rgba(0, 0, 0, 0.5);
+}
+
+body[data-grid-state="collapsing"] .platform-tile {
+  animation: tile-collapse 680ms steps(3, end) both;
+  animation-delay: var(--collapse-delay);
+}
+
+body[data-grid-state="collapsed"] .platform-tile {
+  opacity: 0.17;
+  filter: grayscale(1) brightness(0.55);
+  box-shadow: none;
+}
+
+body[data-grid-state="collapsed"] .platform-tile::after {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+body[data-grid-state="rebuilding"] .platform-tile {
+  animation: tile-rebuild 280ms ease-out both;
+}
+
+@keyframes tile-collapse {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  35% {
+    opacity: 0.36;
+    transform: translateY(1px) scale(0.98);
+  }
+  100% {
+    opacity: 0.15;
+    transform: translateY(2px) scale(0.96);
+  }
+}
+
+@keyframes tile-rebuild {
+  0% {
+    opacity: 0.4;
+    transform: scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 .tile-label {
   font-size: 0.8rem;
   color: var(--muted);
@@ -377,5 +488,18 @@ body[data-mode="peace7"] .platform-tile.end {
 
   .tile-name {
     font-size: 0.9rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mode-button,
+  .platform-tile {
+    transition: none;
+    animation: none;
+  }
+
+  body[data-grid-state="collapsing"] .platform-tile {
+    opacity: 0.17;
+    filter: grayscale(1) brightness(0.55);
   }
 }

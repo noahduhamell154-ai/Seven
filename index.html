@@ -35,7 +35,42 @@
           >
             Zion-07
           </button>
+          <button
+            class="mode-button"
+            type="button"
+            data-mode-trigger="matrix"
+            aria-pressed="false"
+          >
+            The Matrix
+          </button>
         </div>
+        <p class="relay-status" id="relay-status">Chrono Relay link: synchronized.</p>
+        <p class="grid-system-state" id="grid-system-state">Grid systems: Active.</p>
+        <div class="system-controls" aria-label="Grid system controls">
+          <button
+            class="mode-button danger-button"
+            type="button"
+            id="collapse-grid"
+            aria-describedby="collapse-guidance"
+          >
+            Collapse the Grid
+          </button>
+          <button
+            class="mode-button restore-button"
+            type="button"
+            id="restore-grid"
+            disabled
+          >
+            Rebuild Grid / Restore all systems
+          </button>
+        </div>
+        <p class="control-guidance" id="collapse-guidance">
+          Collapse requires confirmation and can be fully reversed without reloading.
+        </p>
+        <p class="control-feedback" id="collapse-feedback" aria-live="polite"></p>
+        <p class="grid-live-status" id="grid-live-status" role="status" aria-live="polite">
+          Grid status: Active systems online.
+        </p>
       </section>
 
       <section class="grid-panel" aria-labelledby="platform-grid-title">

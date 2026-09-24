@@ -9,9 +9,18 @@ const legendStart = document.getElementById("legend-start");
 const legendActive = document.getElementById("legend-active");
 const legendEnd = document.getElementById("legend-end");
 const modeButtons = document.querySelectorAll("[data-mode-trigger]");
+const relayStatus = document.getElementById("relay-status");
+const gridSystemState = document.getElementById("grid-system-state");
+const collapseButton = document.getElementById("collapse-grid");
+const restoreButton = document.getElementById("restore-grid");
+const collapseFeedback = document.getElementById("collapse-feedback");
+const gridLiveStatus = document.getElementById("grid-live-status");
 
 const rows = 7;
 const columns = 7;
+const collapseDuration = 1200;
+const rebuildDuration = 350;
+const reduceMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 const modes = {
   legacy: {
@@ -47,6 +56,7 @@ const modes = {
     activeState: "route platform",
     startState: "start platform",
     endState: "end platform",
+    relayStatus: "Chrono Relay link: synchronized.",
   },
   peace7: {
     eyebrow: "peace across the grid",
@@ -92,7 +102,75 @@ const modes = {
     activeState: "peace signal platform",
     startState: "beacon platform",
     endState: "bloom platform",
+    relayStatus: "Chrono Relay link: beacon synchronized.",
   },
+  matrix: {
+    eyebrow: "there is no spoon",
+    title: "The Matrix Grid",
+    subtitle:
+      "Machine code streams through the arena as the route resolves through digital green sectors.",
+    accessCopy: "Matrix shell active. Chrono Relay bridge remains lock-steady.",
+    panelDescription: "7 x 7 machine sectors with the selected shell route highlighted.",
+    legend: {
+      start: "Ingress",
+      active: "Code Path",
+      end: "Exit",
+    },
+    start: "0-6",
+    end: "6-0",
+    activeTiles: [
+      "0-6",
+      "1-6",
+      "1-5",
+      "2-5",
+      "2-4",
+      "3-4",
+      "3-3",
+      "4-3",
+      "4-2",
+      "5-2",
+      "5-1",
+      "6-1",
+      "6-0",
+    ],
+    activeState: "code path sector",
+    startState: "ingress sector",
+    endState: "exit sector",
+    relayStatus: "Chrono Relay link: machine-time synchronized.",
+  },
+};
+
+let activeModeKey = "legacy";
+let modeBeforeCollapse = "legacy";
+let isCollapsed = false;
+let collapseTimer = null;
+let rebuildTimer = null;
+
+const clearTimers = () => {
+  if (collapseTimer) {
+    clearTimeout(collapseTimer);
+    collapseTimer = null;
+  }
+
+  if (rebuildTimer) {
+    clearTimeout(rebuildTimer);
+    rebuildTimer = null;
+  }
+};
+
+const setControlStates = () => {
+  const collapsing = body?.dataset.gridState === "collapsing";
+  collapseButton.disabled = isCollapsed || collapsing;
+  restoreButton.disabled = !isCollapsed;
+
+  modeButtons.forEach((button) => {
+    button.disabled = isCollapsed || collapsing;
+  });
+};
+
+const setStatusCopy = (statusText, liveText) => {
+  gridSystemState.textContent = statusText;
+  gridLiveStatus.textContent = liveText;
 };
 
 const renderGrid = (modeKey) => {
@@ -103,6 +181,7 @@ const renderGrid = (modeKey) => {
   const normalizedModeKey = Object.hasOwn(modes, modeKey) ? modeKey : "legacy";
   const mode = modes[normalizedModeKey];
   const activeTiles = new Set(mode.activeTiles);
+  activeModeKey = normalizedModeKey;
 
   body.dataset.mode = normalizedModeKey;
   eyebrow.textContent = mode.eyebrow;
@@ -114,6 +193,10 @@ const renderGrid = (modeKey) => {
   legendActive.textContent = mode.legend.active;
   legendEnd.textContent = mode.legend.end;
   grid.replaceChildren();
+
+  if (!isCollapsed) {
+    relayStatus.textContent = mode.relayStatus;
+  }
 
   modeButtons.forEach((button) => {
     const isSelected = button.dataset.modeTrigger === normalizedModeKey;
@@ -132,6 +215,7 @@ const renderGrid = (modeKey) => {
       let state = "standard platform";
 
       tile.className = "platform-tile";
+      tile.style.setProperty("--collapse-delay", `${(row * columns + column) * 18}ms`);
 
       label.className = "tile-label";
       label.textContent = tileNumber;
@@ -165,8 +249,87 @@ const renderGrid = (modeKey) => {
 
 modeButtons.forEach((button) => {
   button.addEventListener("click", () => {
+    if (isCollapsed) {
+      return;
+    }
+
     renderGrid(button.dataset.modeTrigger);
+    modeBeforeCollapse = activeModeKey;
+    setStatusCopy("Grid systems: Active.", `Grid status: ${modes[activeModeKey].title} active.`);
   });
 });
 
+const beginCollapse = () => {
+  clearTimers();
+  isCollapsed = false;
+  body.dataset.gridState = "collapsing";
+  relayStatus.textContent = "Chrono Relay link: offline.";
+  setStatusCopy("Grid systems: Collapsing.", "Grid status: Collapse sequence initiated.");
+  collapseFeedback.textContent = "Collapse confirmed. Systems are powering down.";
+  setControlStates();
+
+  const finalizeCollapse = () => {
+    body.dataset.gridState = "collapsed";
+    isCollapsed = true;
+    setStatusCopy("Grid systems: Collapsed.", "Grid status: All grid modes collapsed.");
+    setControlStates();
+  };
+
+  if (reduceMotionQuery.matches) {
+    finalizeCollapse();
+    return;
+  }
+
+  collapseTimer = window.setTimeout(finalizeCollapse, collapseDuration);
+};
+
+const restoreGrid = () => {
+  clearTimers();
+  isCollapsed = false;
+  body.dataset.gridState = reduceMotionQuery.matches ? "active" : "rebuilding";
+  renderGrid(modeBeforeCollapse);
+  relayStatus.textContent = modes[modeBeforeCollapse].relayStatus;
+  setStatusCopy("Grid systems: Active.", `Grid status: ${modes[modeBeforeCollapse].title} restored.`);
+  collapseFeedback.textContent = "All systems restored. Grid traversal is re-enabled.";
+  setControlStates();
+
+  if (reduceMotionQuery.matches) {
+    return;
+  }
+
+  rebuildTimer = window.setTimeout(() => {
+    body.dataset.gridState = "active";
+  }, rebuildDuration);
+};
+
+collapseButton?.addEventListener("click", () => {
+  if (isCollapsed || body.dataset.gridState === "collapsing") {
+    return;
+  }
+
+  const confirmed = window.confirm(
+    "Collapse Legacy, Zion-07, The Matrix, and Chrono Relay-linked state now? This is reversible.",
+  );
+
+  if (!confirmed) {
+    collapseFeedback.textContent = "Collapse canceled. Grid remains active.";
+    setStatusCopy("Grid systems: Active.", `Grid status: ${modes[activeModeKey].title} remains active.`);
+    return;
+  }
+
+  modeBeforeCollapse = activeModeKey;
+  beginCollapse();
+});
+
+restoreButton?.addEventListener("click", () => {
+  if (!isCollapsed) {
+    return;
+  }
+
+  restoreGrid();
+});
+
+body.dataset.gridState = "active";
 renderGrid("legacy");
+setStatusCopy("Grid systems: Active.", "Grid status: Legacy mode active.");
+setControlStates();
