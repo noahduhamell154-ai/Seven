@@ -308,7 +308,7 @@ const startJump = () => {
     return;
   }
 
-  const currentIndex = modeOrder.indexOf(relayState.mode);
+  const currentIndex = modeOrder.includes(relayState.mode) ? modeOrder.indexOf(relayState.mode) : 0;
   const nextMode = modeOrder[(currentIndex + 1) % modeOrder.length];
   const duration = reducedMotion.matches ? 160 : 1400;
 
