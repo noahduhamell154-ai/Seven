@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seven Grid Defense</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="layout">
+      <section class="panel">
+        <p class="eyebrow">Seven // Grid Defense</p>
+        <h1>Mecha AI protects the Grid.</h1>
+        <p class="summary">
+          A defense core patrols the Grid, intercepts incoming corruption, and
+          keeps the system stable.
+        </p>
+        <dl class="stats">
+          <div>
+            <dt>Status</dt>
+            <dd id="status">Booting…</dd>
+          </div>
+          <div>
+            <dt>Threats Neutralized</dt>
+            <dd id="score">0</dd>
+          </div>
+          <div>
+            <dt>Integrity</dt>
+            <dd id="integrity">100%</dd>
+          </div>
+        </dl>
+        <button id="reset" type="button">Reinitialize Defense</button>
+      </section>
+
+      <section class="grid-shell">
+        <canvas
+          id="grid"
+          width="640"
+          height="640"
+          aria-label="Grid defense simulation"
+        ></canvas>
+        <p class="legend">
+          Cyan = Mecha AI core · Orange = incoming threat · Blue = protected
+          trail
+        </p>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

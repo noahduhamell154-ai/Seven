@@ -53,8 +53,10 @@ const modes = {
     title: "Peace7 Mode",
     subtitle:
       "A calmer signal for Seven that reshapes the arena into a glowing peace pattern.",
-    accessCopy: "Password: Peace7. Grid callsign: Zion7 or Zion-07.",
-    panelDescription: "7 x 7 light platforms tuned into the Peace7 beacon.",
+    accessCopy:
+      "Password: Peace7. Grid callsign: Zion7 or Zion-07.",
+    panelDescription:
+      "7 x 7 light platforms tuned into the Peace7 beacon.",
     legend: {
       start: "Beacon",
       active: "Signal",
