@@ -15,3 +15,10 @@ npm start
 ```
 
 Then open `http://localhost:8000`.
+
+## Grid platform features
+
+- Tron: Legacy-inspired 7x7 neon platform arena with Legacy and Zion-07 modes.
+- Interactive signal run: activate platforms in sequence with mouse or keyboard.
+- Reset and replay controls with live status updates for accessibility.
+- Cinematic atmosphere effects (scanlines, ambient glow) with `prefers-reduced-motion` support.
