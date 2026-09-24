@@ -354,8 +354,8 @@ modeButtons.forEach((button) => {
     }
 
     const modeKey = button.dataset.modeTrigger;
-    const mode = modes[modeKey];
-    setMode(modeKey, `${mode.buttonLabel} corridor selected manually.`);
+    const normalizedModeKey = Object.hasOwn(modes, modeKey) ? modeKey : "legacy";
+    setMode(normalizedModeKey, `${modes[normalizedModeKey].buttonLabel} corridor selected manually.`);
   });
 });
 
