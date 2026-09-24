@@ -111,28 +111,29 @@ function moveThreats() {
 }
 
 function resolveCollisions() {
-  let interceptions = 0;
+  let availableWeaponCharge = state.weaponCharge;
   const breach = state.threats.some((threat) => sameCell(threat, state.ai));
 
   state.threats = state.threats.filter((threat) => {
-    const intercepted = state.trail.some((segment) => sameCell(segment, threat));
+    const trailContact = state.trail.some((segment) => sameCell(segment, threat));
+    const intercepted = trailContact && availableWeaponCharge >= 8;
 
     if (intercepted) {
       state.score += 1;
-      interceptions += 1;
+      availableWeaponCharge -= 8;
     }
 
     return !intercepted && !sameCell(threat, state.ai);
   });
 
-  state.weaponCharge = clamp(state.weaponCharge - interceptions * 8, 0, MAX_WEAPON_CHARGE);
+  state.weaponCharge = clamp(availableWeaponCharge, 0, MAX_WEAPON_CHARGE);
 
   if (breach) {
     state.integrity = Math.max(0, state.integrity - 20);
 
     if (state.toolCharge >= 20) {
       state.toolCharge = Math.max(0, state.toolCharge - 20);
-      state.integrity = Math.min(100, state.integrity + 8);
+      state.integrity = Math.min(100, state.integrity + 20);
     }
   }
 
