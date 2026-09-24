@@ -3,6 +3,7 @@ const grid = document.getElementById("platform-grid");
 const eyebrow = document.getElementById("mode-eyebrow");
 const title = document.getElementById("mode-title");
 const subtitle = document.getElementById("mode-subtitle");
+const accessCopy = document.getElementById("mode-access-copy");
 const panelDescription = document.getElementById("panel-description");
 const legendStart = document.getElementById("legend-start");
 const legendActive = document.getElementById("legend-active");
@@ -18,6 +19,7 @@ const modes = {
     title: "Tron: Legacy Grid",
     subtitle:
       "A light-grid inspired by Tron: Legacy with luminous platforms and a glowing path across the arena.",
+    accessCopy: "Legacy access remains open across the arena.",
     panelDescription:
       "7 x 7 light platforms with a highlighted run across the grid.",
     legend: {
@@ -51,6 +53,8 @@ const modes = {
     title: "Peace7 Mode",
     subtitle:
       "A calmer signal for Seven that reshapes the arena into a glowing peace pattern.",
+    accessCopy:
+      "Password: Peace7. Grid callsign: Zion7 or Zion-07.",
     panelDescription:
       "7 x 7 light platforms tuned into the Peace7 beacon.",
     legend: {
@@ -103,6 +107,7 @@ const renderGrid = (modeKey) => {
   eyebrow.textContent = mode.eyebrow;
   title.textContent = mode.title;
   subtitle.textContent = mode.subtitle;
+  accessCopy.textContent = mode.accessCopy;
   panelDescription.textContent = mode.panelDescription;
   legendStart.textContent = mode.legend.start;
   legendActive.textContent = mode.legend.active;
