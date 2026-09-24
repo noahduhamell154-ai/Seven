@@ -128,16 +128,13 @@ function resolveCollisions() {
 
   state.weaponCharge = clamp(availableWeaponCharge, 0, MAX_WEAPON_CHARGE);
 
-  const breach = state.threats.some((threat) => sameCell(threat, state.ai));
+  const breaches = state.threats.filter((threat) => sameCell(threat, state.ai)).length;
 
-  if (breach) {
-    state.integrity = Math.max(0, state.integrity - 20);
-
-    if (state.toolCharge >= 20) {
-      state.toolCharge = Math.max(0, state.toolCharge - 20);
-      state.integrity = Math.min(100, state.integrity + 20);
-    }
-
+  if (breaches > 0) {
+    const repairCharges = Math.min(breaches, Math.floor(state.toolCharge / 20));
+    const integrityChange = breaches * 20 - repairCharges * 20;
+    state.toolCharge = Math.max(0, state.toolCharge - repairCharges * 20);
+    state.integrity = clamp(state.integrity - integrityChange, 0, 100);
     state.threats = state.threats.filter((threat) => !sameCell(threat, state.ai));
   }
 
