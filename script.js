@@ -431,9 +431,9 @@ function moveToIndex(targetIndex, options = {}) {
 
     ensureRouteLength(nextObjectiveIndex + LOOKAHEAD_BUFFER);
     setLiveStatus(MODES[state.modeKey].statusExpand);
-    renderGrid();
     state.relayStartIndex = state.playerIndex;
     state.objectiveIndex = nextObjectiveIndex;
+    renderGrid();
   } else {
     if (!options.silent) {
       setLiveStatus(MODES[state.modeKey].statusAdvance);
