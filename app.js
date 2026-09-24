@@ -115,15 +115,19 @@ function resolveCollisions() {
   const breach = state.threats.some((threat) => sameCell(threat, state.ai));
 
   state.threats = state.threats.filter((threat) => {
+    const aiContact = sameCell(threat, state.ai);
     const trailContact = state.trail.some((segment) => sameCell(segment, threat));
-    const intercepted = trailContact && availableWeaponCharge >= 8;
+    const intercepted = aiContact || (trailContact && availableWeaponCharge >= 8);
 
     if (intercepted) {
       state.score += 1;
-      availableWeaponCharge -= 8;
+
+      if (!aiContact) {
+        availableWeaponCharge -= 8;
+      }
     }
 
-    return !intercepted && !sameCell(threat, state.ai);
+    return !intercepted;
   });
 
   state.weaponCharge = clamp(availableWeaponCharge, 0, MAX_WEAPON_CHARGE);
