@@ -431,7 +431,10 @@ function moveSelection(deltaX, deltaY) {
   announceStatus(`Selection moved to ${getMode().tileLabel(state.selected.x, state.selected.y)}.`);
 }
 
-function traverseTo(target, { recordHistory = true } = {}) {
+function traverseTo(
+  target,
+  { recordHistory = true, announce = true, focusSelection = true, renderAfter = true } = {},
+) {
   const mode = getMode();
 
   if (manhattanDistance(state.player, target) !== 1) {
@@ -459,10 +462,15 @@ function traverseTo(target, { recordHistory = true } = {}) {
     recordMove(directionKey);
   }
 
-  render({ focusSelection: true });
-  announceStatus(
-    `Traversed to ${mode.tileLabel(target.x, target.y)}. ${signalMessage(getReachablePlatforms().length)}.`,
-  );
+  if (renderAfter) {
+    render({ focusSelection });
+  }
+
+  if (announce) {
+    announceStatus(
+      `Traversed to ${mode.tileLabel(target.x, target.y)}. ${signalMessage(getReachablePlatforms().length)}.`,
+    );
+  }
   return true;
 }
 
@@ -501,6 +509,29 @@ function replayRun() {
   render({ focusSelection: true });
   announceStatus(`Replaying ${replayPath.length} recent moves.`);
 
+  if (motionQuery.matches) {
+    replayPath.forEach((directionKey) => {
+      const direction = DIRECTIONS[directionKey];
+      const target = {
+        x: state.player.x + direction.x,
+        y: state.player.y + direction.y,
+      };
+
+      traverseTo(target, {
+        recordHistory: false,
+        announce: false,
+        focusSelection: false,
+        renderAfter: false,
+      });
+    });
+
+    state.moveHistory = replayPath;
+    state.isReplaying = false;
+    render({ focusSelection: true });
+    announceStatus(`Replay complete at ${getMode().tileLabel(state.player.x, state.player.y)}.`);
+    return;
+  }
+
   const advanceReplay = (index) => {
     if (index >= replayPath.length) {
       state.moveHistory = replayPath;
@@ -518,8 +549,7 @@ function replayRun() {
 
     traverseTo(target, { recordHistory: false });
 
-    const replayDelay = motionQuery.matches ? 0 : REPLAY_DELAY_MS;
-    state.replayTimer = window.setTimeout(() => advanceReplay(index + 1), replayDelay);
+    state.replayTimer = window.setTimeout(() => advanceReplay(index + 1), REPLAY_DELAY_MS);
   };
 
   advanceReplay(0);

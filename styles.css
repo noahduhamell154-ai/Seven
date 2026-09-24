@@ -449,20 +449,31 @@ body[data-mode="matrix"] .grid-stage::after {
 .platform-tile.is-reachable {
   border-color: var(--reachable);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04), 0 0 22px var(--glow-soft);
-  border-color: color-mix(in srgb, var(--reachable) 74%, white);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04), 0 0 22px color-mix(in srgb, var(--reachable) 32%, transparent);
 }
 
 .platform-tile.is-selected {
   border-color: var(--selected);
   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.16), 0 0 20px var(--accent-soft);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--selected) 26%, transparent), 0 0 20px color-mix(in srgb, var(--selected) 35%, transparent);
 }
 
 .platform-tile.is-current {
   border-color: var(--current);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12), 0 0 22px var(--glow-soft);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--current) 35%, transparent), 0 0 22px color-mix(in srgb, var(--current) 40%, transparent);
+}
+
+@supports (color: color-mix(in srgb, white 50%, black)) {
+  .platform-tile.is-reachable {
+    border-color: color-mix(in srgb, var(--reachable) 74%, white);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04), 0 0 22px color-mix(in srgb, var(--reachable) 32%, transparent);
+  }
+
+  .platform-tile.is-selected {
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--selected) 26%, transparent), 0 0 20px color-mix(in srgb, var(--selected) 35%, transparent);
+  }
+
+  .platform-tile.is-current {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--current) 35%, transparent), 0 0 22px color-mix(in srgb, var(--current) 40%, transparent);
+  }
 }
 
 .platform-tile.is-trail {
