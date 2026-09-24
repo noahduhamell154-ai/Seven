@@ -247,6 +247,7 @@ function createInitialState(modeKey) {
 }
 
 let state = createInitialState("legacy");
+let lastViewportSize = getViewportSize();
 
 function stopReplay() {
   if (state.replayTimer) {
@@ -543,7 +544,6 @@ function renderGrid() {
     listItem.className = "platform-tile";
     listItem.setAttribute("role", "presentation");
     button.type = "button";
-    button.setAttribute("role", "gridcell");
     button.className = "platform-button";
     button.dataset.x = String(point.x);
     button.dataset.y = String(point.y);
@@ -555,6 +555,7 @@ function renderGrid() {
     coordinate.textContent = formatCoordinate(point);
 
     if (isRoute) {
+      listItem.setAttribute("role", "gridcell");
       button.classList.add("is-route");
       label.textContent = isObjective
         ? MODES[state.modeKey].legend.end
@@ -567,9 +568,11 @@ function renderGrid() {
         `${label.textContent} ${index}. Sector ${formatSector(point)} at coordinates ${formatCoordinate(point)}.`,
       );
     } else {
+      listItem.setAttribute("role", "gridcell");
       button.classList.add("is-blocked");
       label.textContent = "Platform";
       name.textContent = formatSector(point);
+      button.disabled = true;
       button.setAttribute("aria-disabled", "true");
       button.setAttribute(
         "aria-label",
@@ -651,10 +654,18 @@ function initializeGridExperience() {
   updateModeContent();
   renderGrid();
   setLiveStatus(MODES[state.modeKey].statusReady);
+  lastViewportSize = getViewportSize();
 
   grid.addEventListener("click", handleGridClick);
   window.addEventListener("keydown", handleKeydown);
-  window.addEventListener("resize", renderGrid);
+  window.addEventListener("resize", () => {
+    const nextViewportSize = getViewportSize();
+
+    if (nextViewportSize !== lastViewportSize) {
+      lastViewportSize = nextViewportSize;
+      renderGrid();
+    }
+  });
 
   modeButtons.forEach((button) => {
     button.addEventListener("click", () => {
