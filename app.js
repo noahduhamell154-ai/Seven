@@ -14,6 +14,8 @@ const MAX_TRAIL = 14;
 const THREAT_LIMIT = 6;
 const MAX_WEAPON_CHARGE = 100;
 const MAX_TOOL_CHARGE = 100;
+const WEAPON_RECHARGE_RATE = 3.2;
+const TOOL_RECHARGE_RATE = 1.1;
 
 const COLORS = {
   ai: "#66f3ff",
@@ -110,22 +112,21 @@ function moveThreats() {
 
 function resolveCollisions() {
   let interceptions = 0;
+  const breach = state.threats.some((threat) => sameCell(threat, state.ai));
 
   state.threats = state.threats.filter((threat) => {
-    const intercepted =
-      sameCell(threat, state.ai) || state.trail.some((segment) => sameCell(segment, threat));
+    const intercepted = state.trail.some((segment) => sameCell(segment, threat));
 
     if (intercepted) {
       state.score += 1;
       interceptions += 1;
     }
 
-    return !intercepted;
+    return !intercepted && !sameCell(threat, state.ai);
   });
 
   state.weaponCharge = clamp(state.weaponCharge - interceptions * 8, 0, MAX_WEAPON_CHARGE);
 
-  const breach = state.threats.some((threat) => sameCell(threat, state.ai));
   if (breach) {
     state.integrity = Math.max(0, state.integrity - 20);
 
@@ -199,8 +200,12 @@ function tick() {
     moveAi();
     moveThreats();
     resolveCollisions();
-    state.weaponCharge = clamp(state.weaponCharge + 3.2, 0, MAX_WEAPON_CHARGE);
-    state.toolCharge = clamp(state.toolCharge + 1.1, 0, MAX_TOOL_CHARGE);
+    state.weaponCharge = clamp(
+      state.weaponCharge + WEAPON_RECHARGE_RATE,
+      0,
+      MAX_WEAPON_CHARGE,
+    );
+    state.toolCharge = clamp(state.toolCharge + TOOL_RECHARGE_RATE, 0, MAX_TOOL_CHARGE);
   }
 
   state.pulse += 1;
