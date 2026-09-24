@@ -149,6 +149,8 @@ const relayState = {
 
 let jumpTimer;
 
+const getManualSelectionMessage = (modeKey) => `${modes[modeKey].relayTarget} selected manually.`;
+
 const getStatusMessage = (prefix) => {
   const mode = modes[relayState.mode];
   const lampState = relayState.lampActive ? "Lamp active." : "Lamp dormant.";
@@ -291,6 +293,7 @@ const toggleDoors = () => {
 
 const resetRelay = () => {
   window.clearTimeout(jumpTimer);
+  jumpTimer = undefined;
   relayState.mode = "legacy";
   relayState.lampActive = false;
   relayState.doorsOpen = false;
@@ -316,6 +319,7 @@ const startJump = () => {
   announceStatus(`Time jump charging for ${modes[nextMode].relayTarget}.`);
 
   jumpTimer = window.setTimeout(() => {
+    jumpTimer = undefined;
     relayState.mode = nextMode;
     relayState.jumping = false;
     relayState.doorsOpen = false;
@@ -339,11 +343,11 @@ const triggerShortcut = (key) => {
   } else if (key === "r") {
     resetRelay();
   } else if (key === "1") {
-    setMode("legacy", "Legacy corridor selected manually.");
+    setMode("legacy", getManualSelectionMessage("legacy"));
   } else if (key === "2") {
-    setMode("peace7", "Zion-07 beacon selected manually.");
+    setMode("peace7", getManualSelectionMessage("peace7"));
   } else if (key === "3") {
-    setMode("matrix", "Cipher Rain corridor selected manually.");
+    setMode("matrix", getManualSelectionMessage("matrix"));
   }
 };
 
@@ -355,7 +359,7 @@ modeButtons.forEach((button) => {
 
     const modeKey = button.dataset.modeTrigger;
     const normalizedModeKey = Object.hasOwn(modes, modeKey) ? modeKey : "legacy";
-    setMode(normalizedModeKey, `${modes[normalizedModeKey].buttonLabel} corridor selected manually.`);
+    setMode(normalizedModeKey, getManualSelectionMessage(normalizedModeKey));
   });
 });
 
