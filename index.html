@@ -3,22 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Seven | Tron: Legacy Grid</title>
+    <title>Seven | Chrono Relay Grid</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <main class="app-shell">
       <section class="hero">
-        <p class="eyebrow" id="mode-eyebrow">wake-up Neo...</p>
-        <h1 id="mode-title">Tron: Legacy Grid</h1>
+        <p class="eyebrow" id="mode-eyebrow">chrono relay aligned</p>
+        <h1 id="mode-title">Legacy Arc Grid</h1>
         <p class="subtitle" id="mode-subtitle">
-          A light-grid inspired by Tron: Legacy with luminous platforms and a
-          glowing path across the arena.
+          A luminous corridor map with a fan-inspired neon arena, responsive
+          platform routing, and a temporal relay anchored beside the Grid.
         </p>
         <p class="access-copy" id="mode-access-copy">
-          Legacy access remains open across the arena.
+          Chrono Relay is synced to the Legacy corridor.
         </p>
-        <div class="mode-switch" aria-label="Grid mode selector">
+        <div class="mode-switch" role="group" aria-label="Grid mode selector">
           <button
             class="mode-button is-selected"
             type="button"
@@ -35,6 +35,88 @@
           >
             Zion-07
           </button>
+          <button
+            class="mode-button"
+            type="button"
+            data-mode-trigger="matrix"
+            aria-pressed="false"
+          >
+            Cipher Rain
+          </button>
+        </div>
+      </section>
+
+      <section class="relay-panel" aria-labelledby="chrono-relay-title">
+        <div class="relay-copy">
+          <p class="eyebrow">timebox 07 online</p>
+          <h2 id="chrono-relay-title">Chrono Relay</h2>
+          <p class="subtitle">
+            A blue vintage timebox-inspired portal console with a rotating roof
+            lamp, opening doors, temporal fog, and a controlled jump sequence
+            tied directly into the Grid.
+          </p>
+          <p class="relay-target" id="relay-target">Legacy corridor selected</p>
+          <p class="relay-status" id="relay-status" role="status" aria-live="polite">
+            Lamp dormant. Doors sealed. Legacy corridor selected.
+          </p>
+          <div class="relay-controls" role="group" aria-label="Chrono Relay controls">
+            <button id="relay-lamp" class="relay-button" type="button" aria-pressed="false">
+              Lamp off
+            </button>
+            <button id="relay-doors" class="relay-button" type="button" aria-pressed="false">
+              Doors closed
+            </button>
+            <button id="relay-jump" class="relay-button relay-button-primary" type="button">
+              Time jump
+            </button>
+            <button id="relay-reset" class="relay-button" type="button">
+              Reset relay
+            </button>
+          </div>
+          <p class="control-hint">
+            Keys: <kbd>L</kbd> lamp · <kbd>O</kbd> doors · <kbd>T</kbd> jump ·
+            <kbd>R</kbd> reset · <kbd>1</kbd>-<kbd>3</kbd> corridors
+          </p>
+        </div>
+
+        <div class="relay-scene" aria-hidden="true">
+          <div class="fog fog-a"></div>
+          <div class="fog fog-b"></div>
+          <div class="particle-ring">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="timebox">
+            <div class="timebox-lamp">
+              <span class="lamp-core"></span>
+            </div>
+            <div class="timebox-top"></div>
+            <div class="timebox-sign">TIMEBOX 07</div>
+            <div class="timebox-body">
+              <span class="timebox-post post-a"></span>
+              <span class="timebox-post post-b"></span>
+              <span class="timebox-post post-c"></span>
+              <span class="timebox-post post-d"></span>
+              <div class="window-strip">
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+              </div>
+              <div class="door-well">
+                <div class="temporal-core">
+                  <span>07 // READY</span>
+                  <strong>Temporal interior</strong>
+                </div>
+                <div class="timebox-door door-left">
+                  <div class="door-window"><span></span><span></span><span></span><span></span></div>
+                  <div class="door-panels"><span></span><span></span><span></span></div>
+                </div>
+                <div class="timebox-door door-right">
+                  <div class="door-window"><span></span><span></span><span></span><span></span></div>
+                  <div class="door-panels"><span></span><span></span><span></span></div>
+                </div>
+              </div>
+            </div>
+            <div class="timebox-step step-a"></div>
+            <div class="timebox-step step-b"></div>
+          </div>
         </div>
       </section>
 
