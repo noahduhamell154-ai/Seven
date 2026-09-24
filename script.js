@@ -427,7 +427,7 @@ function moveToIndex(targetIndex, options = {}) {
   ensureRouteLength(state.playerIndex + LOOKAHEAD_BUFFER);
 
   if (state.playerIndex >= state.objectiveIndex) {
-    state.relayStartIndex = state.objectiveIndex;
+    state.relayStartIndex = state.playerIndex;
     state.objectiveIndex += RELAY_LENGTH;
     ensureRouteLength(state.objectiveIndex + LOOKAHEAD_BUFFER);
     setLiveStatus(MODES[state.modeKey].statusExpand);
@@ -542,7 +542,6 @@ function renderGrid() {
     const isAdjacent = adjacentIndices.includes(index);
 
     listItem.className = "platform-tile";
-    listItem.setAttribute("role", "presentation");
     button.type = "button";
     button.className = "platform-button";
     button.dataset.x = String(point.x);
@@ -555,7 +554,6 @@ function renderGrid() {
     coordinate.textContent = formatCoordinate(point);
 
     if (isRoute) {
-      listItem.setAttribute("role", "gridcell");
       button.classList.add("is-route");
       label.textContent = isObjective
         ? MODES[state.modeKey].legend.end
@@ -568,7 +566,6 @@ function renderGrid() {
         `${label.textContent} ${index}. Sector ${formatSector(point)} at coordinates ${formatCoordinate(point)}.`,
       );
     } else {
-      listItem.setAttribute("role", "gridcell");
       button.classList.add("is-blocked");
       label.textContent = "Platform";
       name.textContent = formatSector(point);
