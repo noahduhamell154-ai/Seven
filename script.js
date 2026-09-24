@@ -197,7 +197,6 @@ function createTileButtons() {
       button.type = "button";
       button.dataset.relativeX = String(relativeX);
       button.dataset.relativeY = String(relativeY);
-      button.setAttribute("role", "gridcell");
 
       eyebrowText.className = "tile-label";
       code.className = "tile-name";
@@ -405,8 +404,11 @@ function render({ focusSelection = false } = {}) {
         isTrail,
       }),
     );
-    button.setAttribute("aria-current", isCurrent ? "true" : "false");
-    button.setAttribute("aria-pressed", isSelected ? "true" : "false");
+    if (isCurrent) {
+      button.setAttribute("aria-current", "location");
+    } else {
+      button.removeAttribute("aria-current");
+    }
   });
 
   if (focusSelection) {
@@ -516,12 +518,8 @@ function replayRun() {
 
     traverseTo(target, { recordHistory: false });
 
-    if (motionQuery.matches) {
-      advanceReplay(index + 1);
-      return;
-    }
-
-    state.replayTimer = window.setTimeout(() => advanceReplay(index + 1), REPLAY_DELAY_MS);
+    const replayDelay = motionQuery.matches ? 0 : REPLAY_DELAY_MS;
+    state.replayTimer = window.setTimeout(() => advanceReplay(index + 1), replayDelay);
   };
 
   advanceReplay(0);
