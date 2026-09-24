@@ -3,12 +3,22 @@ const context = canvas.getContext("2d");
 const statusNode = document.getElementById("status");
 const scoreNode = document.getElementById("score");
 const integrityNode = document.getElementById("integrity");
+const vehicleNode = document.getElementById("vehicle");
+const weaponsNode = document.getElementById("weapons");
+const toolsNode = document.getElementById("tools");
 const resetButton = document.getElementById("reset");
 
 const GRID_SIZE = 20;
 const CELL_SIZE = canvas.width / GRID_SIZE;
 const MAX_TRAIL = 14;
 const THREAT_LIMIT = 6;
+const MAX_WEAPON_CHARGE = 100;
+const MAX_TOOL_CHARGE = 100;
+const WEAPON_SHOT_COST = 8;
+const BREACH_DAMAGE = 20;
+const TOOL_REPAIR_COST = 20;
+const WEAPON_RECHARGE_RATE = 3.2;
+const TOOL_RECHARGE_RATE = 1.1;
 
 const COLORS = {
   ai: "#66f3ff",
@@ -47,11 +57,15 @@ function spawnThreat() {
 
 function createState() {
   return {
+    program: "34",
+    vehicle: "Aegis Rover",
     ai: { x: Math.floor(GRID_SIZE / 2), y: Math.floor(GRID_SIZE / 2) },
     trail: [],
     threats: Array.from({ length: 3 }, spawnThreat),
     score: 0,
     integrity: 100,
+    weaponCharge: MAX_WEAPON_CHARGE,
+    toolCharge: MAX_TOOL_CHARGE,
     running: true,
     pulse: 0,
   };
@@ -100,20 +114,41 @@ function moveThreats() {
 }
 
 function resolveCollisions() {
+  let availableWeaponCharge = state.weaponCharge;
+
   state.threats = state.threats.filter((threat) => {
+    const aiContact = sameCell(threat, state.ai);
+    const trailContact = state.trail.some((segment) => sameCell(segment, threat));
     const intercepted =
-      sameCell(threat, state.ai) || state.trail.some((segment) => sameCell(segment, threat));
+      (aiContact || trailContact) && availableWeaponCharge >= WEAPON_SHOT_COST;
 
     if (intercepted) {
       state.score += 1;
+      availableWeaponCharge -= WEAPON_SHOT_COST;
     }
 
     return !intercepted;
   });
 
-  const breach = state.threats.some((threat) => sameCell(threat, state.ai));
-  if (breach) {
-    state.integrity = Math.max(0, state.integrity - 20);
+  state.weaponCharge = clamp(availableWeaponCharge, 0, MAX_WEAPON_CHARGE);
+
+  const breaches = state.threats.filter((threat) => sameCell(threat, state.ai)).length;
+
+  if (breaches > 0) {
+    const repairCharges = Math.min(breaches, Math.floor(state.toolCharge / TOOL_REPAIR_COST));
+    const unrepairedBreaches = breaches - repairCharges;
+    state.toolCharge = Math.max(0, state.toolCharge - repairCharges * TOOL_REPAIR_COST);
+    state.integrity = clamp(state.integrity - unrepairedBreaches * BREACH_DAMAGE, 0, 100);
+
+    let remainingRepairs = repairCharges;
+    state.threats = state.threats.filter((threat) => {
+      if (remainingRepairs > 0 && sameCell(threat, state.ai)) {
+        remainingRepairs -= 1;
+        return false;
+      }
+
+      return true;
+    });
   }
 
   while (state.threats.length < THREAT_LIMIT && Math.random() > 0.72) {
@@ -165,11 +200,14 @@ function render() {
 function updateHud() {
   scoreNode.textContent = String(state.score);
   integrityNode.textContent = `${state.integrity}%`;
+  vehicleNode.textContent = `Program ${state.program} · ${state.vehicle}`;
+  weaponsNode.textContent = `${Math.round(state.weaponCharge)}% Pulse Cannon`;
+  toolsNode.textContent = `${Math.round(state.toolCharge)}% Repair Tools`;
   statusNode.textContent = state.running
     ? state.threats.length > 0
-      ? "Patrolling"
-      : "Sector Clear"
-    : "Core Breached";
+      ? "Program 34 Patrolling"
+      : "Program 34 Sector Clear"
+    : "Program 34 Core Breached";
 }
 
 function tick() {
@@ -177,6 +215,12 @@ function tick() {
     moveAi();
     moveThreats();
     resolveCollisions();
+    state.weaponCharge = clamp(
+      state.weaponCharge + WEAPON_RECHARGE_RATE,
+      0,
+      MAX_WEAPON_CHARGE,
+    );
+    state.toolCharge = clamp(state.toolCharge + TOOL_RECHARGE_RATE, 0, MAX_TOOL_CHARGE);
   }
 
   state.pulse += 1;
