@@ -3,6 +3,9 @@ const context = canvas.getContext("2d");
 const statusNode = document.getElementById("status");
 const scoreNode = document.getElementById("score");
 const integrityNode = document.getElementById("integrity");
+const vehicleNode = document.getElementById("vehicle");
+const weaponNode = document.getElementById("weapon");
+const toolNode = document.getElementById("tool");
 const resetButton = document.getElementById("reset");
 
 const GRID_SIZE = 20;
@@ -18,6 +21,11 @@ const COLORS = {
   glow: "rgba(102, 243, 255, 0.32)",
   danger: "#ff5478",
 };
+
+const PROGRAM_ID = "34";
+const VEHICLE_NAME = "VX-34 Sentinel";
+const WEAPONS = ["Pulse Cannon", "Rail Spear", "EMP Burst"];
+const TOOLS = ["Repair Beam", "Target Link", "Nano Shield"];
 
 let state;
 
@@ -54,6 +62,8 @@ function createState() {
     integrity: 100,
     running: true,
     pulse: 0,
+    weaponIndex: 0,
+    toolIndex: 0,
   };
 }
 
@@ -100,11 +110,13 @@ function moveThreats() {
 }
 
 function resolveCollisions() {
+  let interceptedCount = 0;
   state.threats = state.threats.filter((threat) => {
     const intercepted =
       sameCell(threat, state.ai) || state.trail.some((segment) => sameCell(segment, threat));
 
     if (intercepted) {
+      interceptedCount += 1;
       state.score += 1;
     }
 
@@ -114,6 +126,11 @@ function resolveCollisions() {
   const breach = state.threats.some((threat) => sameCell(threat, state.ai));
   if (breach) {
     state.integrity = Math.max(0, state.integrity - 20);
+    state.toolIndex = (state.toolIndex + 1) % TOOLS.length;
+  }
+
+  if (interceptedCount > 0) {
+    state.weaponIndex = (state.weaponIndex + interceptedCount) % WEAPONS.length;
   }
 
   while (state.threats.length < THREAT_LIMIT && Math.random() > 0.72) {
@@ -165,11 +182,20 @@ function render() {
 function updateHud() {
   scoreNode.textContent = String(state.score);
   integrityNode.textContent = `${state.integrity}%`;
+  if (vehicleNode) {
+    vehicleNode.textContent = VEHICLE_NAME;
+  }
+  if (weaponNode) {
+    weaponNode.textContent = WEAPONS[state.weaponIndex];
+  }
+  if (toolNode) {
+    toolNode.textContent = TOOLS[state.toolIndex];
+  }
   statusNode.textContent = state.running
     ? state.threats.length > 0
-      ? "Patrolling"
+      ? `Program ${PROGRAM_ID} Patrolling`
       : "Sector Clear"
-    : "Core Breached";
+    : `Program ${PROGRAM_ID} Core Breached`;
 }
 
 function tick() {
