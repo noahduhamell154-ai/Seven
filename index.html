@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
+    <div class="grid-atmosphere" aria-hidden="true">
+      <div class="particle-field" id="particle-field"></div>
+    </div>
     <main class="app-shell">
       <section class="hero">
         <p class="eyebrow" id="mode-eyebrow">wake-up Neo...</p>
@@ -18,7 +21,10 @@
         <p class="access-copy" id="mode-access-copy">
           Legacy access remains open across the arena.
         </p>
-        <div class="mode-switch" aria-label="Grid mode selector">
+      </section>
+
+      <section class="control-panel" aria-label="Grid controls">
+        <div class="mode-switch" role="group" aria-label="Grid mode selector">
           <button
             class="mode-button is-selected"
             type="button"
@@ -36,14 +42,50 @@
             Zion-07
           </button>
         </div>
+        <div class="action-switch" role="group" aria-label="Traversal controls">
+          <button class="mode-button action-button" type="button" id="reset-run">
+            Reset Run
+          </button>
+          <button class="mode-button action-button" type="button" id="replay-run">
+            Replay Route
+          </button>
+        </div>
+        <p class="control-copy" id="control-copy">
+          Traverse with arrow keys or WASD, then click any adjacent route node
+          to move through the relay.
+        </p>
       </section>
 
-      <section class="grid-panel" aria-labelledby="platform-grid-title">
+      <section class="telemetry-panel" aria-label="Grid telemetry">
+        <div class="telemetry-card">
+          <span class="telemetry-label">Mode</span>
+          <strong class="telemetry-value" id="telemetry-mode">Legacy</strong>
+        </div>
+        <div class="telemetry-card">
+          <span class="telemetry-label">Anchor</span>
+          <strong class="telemetry-value" id="telemetry-position">0, 0</strong>
+        </div>
+        <div class="telemetry-card">
+          <span class="telemetry-label">Progress</span>
+          <strong class="telemetry-value" id="telemetry-progress">0 / 0</strong>
+        </div>
+        <div class="telemetry-card">
+          <span class="telemetry-label">Status</span>
+          <strong class="telemetry-value" id="telemetry-status">Idle</strong>
+        </div>
+      </section>
+
+      <section
+        class="grid-panel"
+        aria-labelledby="platform-grid-title"
+        aria-describedby="panel-description live-status"
+      >
         <div class="panel-header">
           <div>
             <h2 id="platform-grid-title">Arena Layout</h2>
             <p id="panel-description">
-              7 x 7 light platforms with a highlighted run across the grid.
+              An infinite arena viewport with an active traversal run across the
+              Grid.
             </p>
           </div>
           <ul class="legend" aria-label="Platform legend">
@@ -62,11 +104,21 @@
           </ul>
         </div>
 
-        <ul
-          class="platform-grid"
-          id="platform-grid"
-          aria-label="Seven platform grid"
-        ></ul>
+        <div class="viewport-shell">
+          <div class="viewport-hud" aria-hidden="true">
+            <span id="viewport-mode">Legacy</span>
+            <span id="viewport-step">Segment 0</span>
+          </div>
+          <ul
+            class="platform-grid"
+            id="platform-grid"
+            aria-label="Seven platform grid"
+            role="grid"
+          ></ul>
+        </div>
+        <p class="live-status" id="live-status" aria-live="polite">
+          Legacy route primed. Select the starting platform to enter the Grid.
+        </p>
       </section>
     </main>
 
