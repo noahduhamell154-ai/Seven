@@ -116,7 +116,7 @@ const renderGrid = (modeKey) => {
   grid.replaceChildren();
 
   modeButtons.forEach((button) => {
-    const isSelected = button.dataset.modeTrigger === modeKey;
+    const isSelected = button.dataset.modeTrigger === normalizedModeKey;
     button.classList.toggle("is-selected", isSelected);
     button.setAttribute("aria-pressed", String(isSelected));
   });

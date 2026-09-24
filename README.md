@@ -2,10 +2,11 @@
 
 A main-based grid inspired by Tron: Legacy.
 
-## Mecha AI
+## Experiences
 
-This repository now includes a small static Grid-defense prototype where Mecha
-AI patrols the arena and intercepts incoming threats.
+- `/index.html` renders the Seven platform grid with `legacy` and `Zion-07`
+  (`peace7`) modes.
+- `/defense.html` preserves the Mecha AI Grid-defense prototype.
 
 ## Run locally
 
