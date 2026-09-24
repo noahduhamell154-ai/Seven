@@ -119,7 +119,10 @@ const setText = (element, value) => {
 
 const setStatus = (message) => {
   if (status) {
-    status.textContent = message;
+    status.textContent = "";
+    window.requestAnimationFrame(() => {
+      status.textContent = message;
+    });
   }
 };
 
@@ -147,6 +150,10 @@ const updateTileActivation = () => {
 
     const isActivated = activatedTiles.has(button.dataset.key);
     tile.classList.toggle("is-activated", isActivated);
+    const stateLabel = button.dataset.stateLabel || "available platform";
+    const stateSuffix = isActivated ? ", activated" : "";
+    const misstepSuffix = tile.classList.contains("is-misstep") ? ", signal mismatch" : "";
+    button.setAttribute("aria-label", `${button.dataset.labelPrefix}, ${stateLabel}${stateSuffix}${misstepSuffix}`);
   });
 };
 
@@ -180,7 +187,11 @@ const activateTile = (key, fromReplay = false) => {
       const missedTile = missedButton.closest(".platform-tile");
       if (missedTile) {
         missedTile.classList.add("is-misstep");
-        window.setTimeout(() => missedTile.classList.remove("is-misstep"), 250);
+        updateTileActivation();
+        window.setTimeout(() => {
+          missedTile.classList.remove("is-misstep");
+          updateTileActivation();
+        }, 250);
       }
     }
     setStatus(`Signal mismatch. Next platform is ${toCode(expectedKey)}.`);
@@ -211,6 +222,11 @@ const activateTile = (key, fromReplay = false) => {
 const replayRun = () => {
   const mode = modes[currentMode];
   if (!mode || !replayButton) {
+    return;
+  }
+
+  if (replayTimer) {
+    setStatus("Replay already in progress.");
     return;
   }
 
@@ -312,8 +328,10 @@ const renderGrid = (modeKey) => {
         state = mode.endState;
       }
 
-      const baseLabel = `${tileNumber}, ${tileCode}, ${state}`;
-      button.setAttribute("aria-label", baseLabel);
+      const baseLabel = `${tileNumber}, ${tileCode}`;
+      button.dataset.labelPrefix = baseLabel;
+      button.dataset.stateLabel = state;
+      button.setAttribute("aria-label", `${baseLabel}, ${state}`);
       button.addEventListener("click", () => activateTile(key));
 
       grid.appendChild(tile);
