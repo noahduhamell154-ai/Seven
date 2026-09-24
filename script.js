@@ -427,15 +427,20 @@ function moveToIndex(targetIndex, options = {}) {
   ensureRouteLength(state.playerIndex + LOOKAHEAD_BUFFER);
 
   if (state.playerIndex >= state.objectiveIndex) {
-    state.relayStartIndex = state.playerIndex;
-    state.objectiveIndex += RELAY_LENGTH;
-    ensureRouteLength(state.objectiveIndex + LOOKAHEAD_BUFFER);
-    setLiveStatus(MODES[state.modeKey].statusExpand);
-  } else if (!options.silent) {
-    setLiveStatus(MODES[state.modeKey].statusAdvance);
-  }
+    const nextObjectiveIndex = state.objectiveIndex + RELAY_LENGTH;
 
-  renderGrid();
+    ensureRouteLength(nextObjectiveIndex + LOOKAHEAD_BUFFER);
+    setLiveStatus(MODES[state.modeKey].statusExpand);
+    renderGrid();
+    state.relayStartIndex = state.playerIndex;
+    state.objectiveIndex = nextObjectiveIndex;
+  } else {
+    if (!options.silent) {
+      setLiveStatus(MODES[state.modeKey].statusAdvance);
+    }
+
+    renderGrid();
+  }
   return true;
 }
 
