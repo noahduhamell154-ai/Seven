@@ -1,5 +1,6 @@
 {
   "name": "seven",
+  "private": true,
   "version": "1.0.0",
   "description": "A main-based grid just like the movie Tron: Legacy",
   "scripts": {

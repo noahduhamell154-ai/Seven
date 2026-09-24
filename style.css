@@ -1,0 +1,130 @@
+:root {
+  color-scheme: dark;
+  --bg: #050816;
+  --panel: rgba(10, 18, 36, 0.9);
+  --line: rgba(71, 215, 255, 0.18);
+  --cyan: #66f3ff;
+  --blue: #2d8cff;
+  --orange: #ff8e3c;
+  --text: #eff7ff;
+  --muted: #8da5c7;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Inter, Arial, sans-serif;
+  background:
+    radial-gradient(circle at top, rgba(45, 140, 255, 0.2), transparent 40%),
+    var(--bg);
+  color: var(--text);
+}
+
+.layout {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  min-height: 100vh;
+  display: grid;
+  gap: 24px;
+  align-items: center;
+  grid-template-columns: minmax(280px, 360px) minmax(320px, 1fr);
+  padding: 32px 0;
+}
+
+.panel,
+.grid-shell {
+  background: var(--panel);
+  border: 1px solid rgba(102, 243, 255, 0.15);
+  border-radius: 20px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+}
+
+.panel {
+  padding: 28px;
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  color: var(--cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.72rem;
+}
+
+h1 {
+  margin: 0 0 14px;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1;
+}
+
+.summary,
+.legend {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.stats {
+  margin: 28px 0;
+  display: grid;
+  gap: 16px;
+}
+
+.stats div {
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(102, 243, 255, 0.06);
+}
+
+dt {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+}
+
+dd {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+button {
+  border: 0;
+  border-radius: 999px;
+  padding: 13px 18px;
+  font: inherit;
+  font-weight: 700;
+  color: #02111f;
+  background: linear-gradient(135deg, var(--cyan), #9fd2ff);
+  cursor: pointer;
+}
+
+.grid-shell {
+  padding: 20px;
+}
+
+canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  background:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px),
+    rgba(5, 10, 22, 0.92);
+  background-size: 5% 5%;
+}
+
+.legend {
+  padding-top: 14px;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
