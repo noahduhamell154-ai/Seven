@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dillinger Desk One</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#020502;
+  color:#8aff70;
+  font-family:Arial,sans-serif;
+}
+header{
+  padding:20px;
+  text-align:center;
+  border-bottom:2px solid #69ff47;
+}
+h1{font-size:24px}
+.panel{
+  margin:15px;
+  padding:18px;
+  border:1px solid #69ff47;
+  border-radius:10px;
+  background:#0a160dcc;
+}
+button,input,textarea{
+  padding:12px;
+  margin:5px 0;
+  border:1px solid #69ff47;
+  border-radius:6px;
+  background:#071007;
+  color:#baffaa;
+  font-size:16px;
+}
+button{cursor:pointer}
+input,textarea{width:100%}
+textarea{height:110px}
+#desk{display:none}
+#output{min-height:45px}
+</style>
+</head>
+<body>
+
+<header>
+<h1>DILLINGER DESK ONE</h1>
+<p>PERSONAL COMMAND TERMINAL</p>
+</header>
+
+<section class="panel" id="startup">
+<h2>SYSTEM STANDBY</h2>
+<button onclick="activate()">ACTIVATE DESK</button>
+</section>
+
+<main id="desk">
